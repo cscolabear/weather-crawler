@@ -1,0 +1,28 @@
+language: node_js
+node_js:
+  - "10"
+cache:
+  directories:
+    - node_modules
+
+install:
+  - npm install
+
+# script:
+#   - npm run build
+
+script:
+  # Set Git config
+  - git config --global user.name "travis-ci"
+  - git config --global user.email "$GIT_EMAIL"
+  - git checkout -b gh-pages
+  # build
+  - npm run build
+  # git
+  - git add -A .
+  - git commit -m ":green_heart:\ Update by travis-ci"
+
+  - git remote rm origin
+  # Add new "origin" with access token in the git URL for authentication
+  - git remote add origin https://${GH_TOKEN}@${GH_REF} > /dev/null 2>&1
+  - git push -f origin gh-pages --quiet
