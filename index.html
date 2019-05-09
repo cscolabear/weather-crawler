@@ -2,8 +2,208 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>weather-crawler index</title>
+    <style>
+        .mini {font-size: small;}
+        .hidden {display: none;}
+
+        @-webkit-keyframes sunnyAnimation {
+            50% {
+                box-shadow: 0.0625rem 0.0625rem 0.25rem 0.125rem rgba(253, 216, 53, 0.75);
+            }
+        }
+
+        @keyframes sunnyAnimation {
+            50% {
+                box-shadow: 0.0625rem 0.0625rem 0.25rem 0.125rem rgba(253, 216, 53, 0.75);
+            }
+        }
+
+        .sunny {
+            display: inline-block;
+            background: #ffeb3b;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 100%;
+            box-shadow: 0.0625rem 0.0625rem 0.5rem 0.125rem rgba(251, 192, 45, 0.8);
+            -webkit-animation: sunnyAnimation 1.2s ease infinite;
+                    animation: sunnyAnimation 1.2s ease infinite;
+        }
+
+        @-webkit-keyframes cloudyAnimation {
+            50% {
+                background: #b0bec5;
+            }
+        }
+
+        @keyframes cloudyAnimation {
+            50% {
+                background: #b0bec5;
+            }
+        }
+
+        .cloudy {
+            display: inline-block;
+            background: #cfd8dc;
+            width: 2.5rem;
+            height: 1.25rem;
+            border-radius: 0.75rem;
+            margin-top: 1rem;
+            -webkit-animation: cloudyAnimation 1.2s ease-in infinite;
+                    animation: cloudyAnimation 1.2s ease-in infinite;
+        }
+        .cloudy:before {
+            display: block;
+            content: '';
+            background: #cfd8dc;
+            width: 1.75rem;
+            height: 1.75rem;
+            position: relative;
+            top: -0.5rem;
+            border-radius: 1.5rem;
+            -webkit-animation: cloudyAnimation 1.2s ease-in infinite;
+                    animation: cloudyAnimation 1.2s ease-in infinite;
+        }
+
+        @-webkit-keyframes rainyAnimation {
+            60% {
+                top: -0.25rem;
+                opacity: 0;
+            }
+            61% {
+                top: -1.5rem;
+            }
+        }
+
+        @keyframes rainyAnimation {
+            60% {
+                top: -0.25rem;
+                opacity: 0;
+            }
+            61% {
+                top: -1.5rem;
+            }
+        }
+
+        .rainy {
+            display: inline-block;
+            background: #b0bec5;
+            width: 2.5rem;
+            height: 1.25rem;
+            border-radius: 0.75rem;
+            margin-top: 1rem;
+        }
+        .rainy:before {
+            display: block;
+            content: '';
+            width: 1.75rem;
+            height: 1.75rem;
+            position: relative;
+            top: -0.5rem;
+            border-radius: 1.5rem;
+            background: #b0bec5;
+        }
+
+        .rainy:after {
+            display: block;
+            content :'';
+            border: 4px dotted #b0bec5;
+            border-radius: 4px;
+            border-left: 0;
+            border-right: 0;
+            position: relative;
+            left: 0.625rem;
+            top: -1.5rem;
+            width: 1.25rem;
+            height: 0.3125rem;
+            transform: rotate(3deg);
+            -webkit-animation: rainyAnimation 1.2s linear infinite;
+                    animation: rainyAnimation 1.2s linear infinite;
+        }
+
+
+        /**
+        * Tabs
+        */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .tabs label {
+            order: 1;
+            display: block;
+            padding: 1rem 2rem;
+            margin-right: 0.2rem;
+            cursor: pointer;
+            background: #90CAF9;
+            font-weight: bold;
+            transition: background ease 0.2s;
+        }
+
+        .tabs .tab {
+            order: 99;
+            flex-grow: 1;
+            width: 100%;
+            display: none;
+            padding: 1rem;
+            background: #fff;
+        }
+
+        .tabs input[type="radio"] {
+            display: none;
+        }
+
+        .tabs input[type="radio"]:checked + label {
+            background: #fff;
+        }
+
+        .tabs input[type="radio"]:checked + label + .tab {
+            display: block;
+        }
+
+        @media (max-width: 45em) {
+            .tabs .tab,
+            .tabs label {
+                order: initial;
+            }
+
+            .tabs label {
+                width: 100%;
+                margin-right: 0;
+                margin-top: 0.2rem;
+            }
+        }
+        /**
+        * Generic Styling
+        */
+        body {
+            background: #eee;
+            min-height: 100vh;
+            box-sizing: border-box;
+            padding: 5vh 0;
+            font-weight: 300;
+            line-height: 1.5;
+            max-width: 60rem;
+            margin: 0 auto;
+            font-size: 112%;
+        }
+    </style>
     <script>
+        const getPOPToCssIcon = (text) => {
+            const number = text.match(/\d+/g)
+                ? text.match(/\d+/g)[0]
+                : null;
+            if (null === number) return '';
+            if (number <= 20) return 'sunny';
+            if (number <= 45) return 'cloudy';
+            return 'rainy';
+        };
+        const timestampToLocalDatetime = (timestamp) => {
+            return new Date(timestamp);
+        };
+
         fetch('./data/json', {
                 headers: new Headers({
                     'Content-type': 'application/json; charset=UTF-8'
@@ -13,10 +213,30 @@
             .then(data => {
                 let html = '';
 
-                Object.keys(data).map(function (key) {
-                    html += `<li><strong>${key}</strong>: ${data[key]}</li>`;
+                let tabs = [];
+                data.forEach(function (item, key) {
+                    const checked = (key ==0) ? 'checked="checked"' : '';
+                    const index = key + 1;
+                    const datetime = timestampToLocalDatetime(item['updated_at']);
+                    tabs.push(`
+                        <input type="radio" name="tabs" id="tab${index}" ${checked}>
+                        <label for="tab${index}">${item['county']}</label>
+                        <div class="tab">
+                            <h2>${item['rain']} <span class="${getPOPToCssIcon(item['rain'])}"></span></h2>
+                            <p>${item['current_title']}</p>
+                            <p>${item['description']}<a href="${item['target_url']}">👉</a></p>
+                            <p>${item['temperature']}</p>
+                            <time datetime="${datetime}" class="mini">updated_at: ${datetime}</time>
+                        </div>
+                    `);
                 });
-                document.querySelector('#app').innerHTML = `<ul>${html}</ul>`;
+
+                return tabs;
+            }).then(data => {
+                const tabs = document.querySelector('.tabs');
+                tabs.innerHTML = data.join('');
+                document.querySelector('#app').classList.add("hidden");
+                tabs.classList.remove("hidden");
             });
     </script>
 </head>
@@ -24,5 +244,10 @@
     <div id="app">
         loading...
     </div>
+
+    <div class="tabs">
+        <!-- js render -->
+    </div>
+
 </body>
-</html>
+</htm''l>
