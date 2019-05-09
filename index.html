@@ -3,8 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>weather-crawler index</title>
+    <script>
+        fetch('./data/json', {
+                headers: new Headers({
+                    'Content-type': 'application/json; charset=UTF-8'
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                let html = '';
+
+                Object.keys(data).map(function (key) {
+                    html += `<li><strong>${key}</strong>: ${data[key]}</li>`;
+                });
+                document.querySelector('#app').innerHTML = `<ul>${html}</ul>`;
+            });
+    </script>
 </head>
 <body>
-    coming soon...
+    <div id="app">
+        loading...
+    </div>
 </body>
 </html>

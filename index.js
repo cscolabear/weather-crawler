@@ -1,4 +1,5 @@
 const Browser = require('./src/Browser');
+const fs = require('fs');
 
 (async () => {
   let result;
@@ -19,8 +20,9 @@ const Browser = require('./src/Browser');
       const current_title = getTextContent('.to-to li .title');
       const description = getTextContent('#marquee_1', 'no description');
       const rain = getTextContent('.to-to li .rain');
+      const updated_at = Date.now();
 
-      return { county, current_title, description, rain };
+      return { county, current_title, description, rain, updated_at };
     });
 
   } catch (err) {
@@ -29,6 +31,12 @@ const Browser = require('./src/Browser');
     await Browser.exit();
 
     console.table(result);
+    fs.writeFile("./data/json", JSON.stringify(result), function (err) {
+      if (err) {
+        return console.error(err);
+      }
+      console.log("The file was saved!");
+    });
   }
 
 })();
