@@ -27,7 +27,8 @@ Browser.prototype.open = async function open(url) {
   await this.start();
   const page = await this.browser.newPage();
   await page.goto(url, {
-    waitUntil: 'networkidle0',
+    waitUntil: 'load',
+    timeout: 60000,
   });
   return page;
 };
