@@ -26,3 +26,8 @@ script:
   # Add new "origin" with access token in the git URL for authentication
   - git remote add origin https://${GH_TOKEN}@${GH_REF} > /dev/null 2>&1
   - git push -f origin gh-pages --quiet
+
+# safelist
+branches:
+  only:
+  - master
