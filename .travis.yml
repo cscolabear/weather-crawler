@@ -16,6 +16,7 @@ script:
   - git config --global user.name "travis-ci"
   - git config --global user.email "$GIT_EMAIL"
   - git checkout -b gh-pages
+  - git rebase master
   # build
   - npm run build
   # git
