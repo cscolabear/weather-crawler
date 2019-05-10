@@ -15,7 +15,6 @@ script:
   # Set Git config
   - git config --global user.name "travis-ci"
   - git config --global user.email "$GIT_EMAIL"
-  - git checkout -b gh-pages
   # build
   - npm run build
   # git
