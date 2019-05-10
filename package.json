@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "./node_modules/mocha/bin/mocha --exit",
     "build": "node index.js"
   },
   "author": "Cola",
@@ -12,8 +12,10 @@
     "puppeteer": "^1.15.0"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
     "eslint": "^5.15.1",
     "eslint-config-airbnb": "^17.1.0",
-    "eslint-plugin-import": "^2.16.0"
+    "eslint-plugin-import": "^2.16.0",
+    "mocha": "^6.1.4"
   }
 }
