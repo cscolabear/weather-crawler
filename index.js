@@ -10,13 +10,13 @@ const countys = {
   64: 'Kaohsiung City',
 };
 
-const getWeather = async (target_url) => {
+const getWeather = async (target_url, en_county_name) => {
   let result;
   try {
     const page = await Browser.open(target_url);
     await page.setViewport({ width: 1280, height: 800, });
 
-    result = await page.evaluate((target_url) => {
+    result = await page.evaluate((target_url, en_county_name) => {
 
       const getTextContent = (selector_string, default_string = '') => {
         return document.querySelector(selector_string)
@@ -31,8 +31,8 @@ const getWeather = async (target_url) => {
       const rain = getTextContent('.to-to li .rain');
       const updated_at = Date.now();
 
-      return { county, current_title, description, temperature, rain, target_url, updated_at };
-    }, target_url);
+      return { county, en_county_name, current_title, description, temperature, rain, target_url, updated_at };
+    }, target_url, en_county_name);
 
   } catch (err) {
     console.error(err);
@@ -45,7 +45,7 @@ const getWeather = async (target_url) => {
 Object.keys(countys).map(cid => {
   target_url = `https://www.cwb.gov.tw/V8/C/W/County/County.html?CID=${cid}`;
   console.log(`${countys[cid]}: ${target_url}`);
-  result.push(getWeather(target_url))
+  result.push(getWeather(target_url, countys[cid]))
 });
 
 Promise.all(result).then(values => {
