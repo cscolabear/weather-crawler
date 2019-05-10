@@ -26,7 +26,7 @@ Browser.prototype.exit = async function exit() {
 Browser.prototype.open = async function open(url) {
   await this.start();
   const page = await this.browser.newPage();
-  await page.goto(url, {
+  this.response = await page.goto(url, {
     waitUntil: 'load',
     timeout: 60000,
   });
