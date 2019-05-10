@@ -11,6 +11,9 @@ cache:
 install:
   - npm install
 
+before_script:
+  - npm test
+
 script:
   # Set Git config
   - git config --global user.name "travis-ci"
