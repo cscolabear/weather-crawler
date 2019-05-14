@@ -1,8 +1,8 @@
 const assert = require('assert');
 const Browser = require('../src/Browser');
 
-const target_url = 'https://www.cwb.gov.tw/V8/C/W/County/County.html';
-const expect_title = '縣市預報 | 交通部中央氣象局';
+const target_url = 'https://www.cwb.gov.tw/V8/C/W/County/County.html?cid=63';
+const expect_title = '臺北市 - 縣市預報 | 交通部中央氣象局';
 let page;
 
 describe('Test Browser.js', async () => {
