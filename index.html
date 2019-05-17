@@ -3,126 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <title>weather-crawler</title>
+    <title>weather-crawler | puppeteer, ci, travis, nodejs</title>
     <style>
+        h1 {margin: 0;font-size: 130%}
+        .smaller {font-size: 15px; color: #333}
         .mini {font-size: small;}
+        .right {display: block;text-align: right;}
         .hidden {display: none;}
+        footer {
+            color: #999;
+            font-size: 0.8rem;
+            padding: 1rem;
+            background: #fff;
+            text-align: center;
+        }
+        footer p {
+            margin: 0;
+        }
 
-        @-webkit-keyframes sunnyAnimation {
-            50% {
-                box-shadow: 0.0625rem 0.0625rem 0.25rem 0.125rem rgba(253, 216, 53, 0.75);
+
+        /* 3 Column Responsive Layout: https://codepen.io/Cheesetoast/pen/KFAaq */
+        /* STRUCTURE */
+        .columns {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: center;
+            margin: 5px 0;
+        }
+        .column {
+            flex: 1;
+            border: 1px solid gray;
+            margin: 2px;
+            padding: 10px;
+            background: #ccc;
+        }
+        .column:first-child {
+            margin-left: 0;
+        }
+        .column:last-child {
+            margin-right: 0;
+        }
+        .column h2 {margin: 0; font-size: 1.2em;}
+        .column p {margin: 5px 0;}
+        .column .row {display: flex;}
+        .row .two-col {flex: 50%;}
+
+        @media screen and (max-width: 980px) {
+            .columns .column {
+                margin-bottom: 5px;
+                flex-basis: 40%;
+            }
+            .columns .column:nth-last-child(2) {
+                margin-right: 0;
+            }
+            .columns .column:last-child {
+                flex-basis: 100%;
+                margin: 0;
+            }
+        }
+        @media screen and (max-width: 680px) {
+            .columns .column {
+                flex-basis: 100%;
+                margin: 0 0 5px 0;
             }
         }
 
-        @keyframes sunnyAnimation {
-            50% {
-                box-shadow: 0.0625rem 0.0625rem 0.25rem 0.125rem rgba(253, 216, 53, 0.75);
-            }
-        }
-
-        .sunny {
-            display: inline-block;
-            background: #ffeb3b;
-            width: 2rem;
-            height: 2rem;
-            border-radius: 100%;
-            box-shadow: 0.0625rem 0.0625rem 0.5rem 0.125rem rgba(251, 192, 45, 0.8);
-            -webkit-animation: sunnyAnimation 1.2s ease infinite;
-                    animation: sunnyAnimation 1.2s ease infinite;
-        }
-
-        @-webkit-keyframes cloudyAnimation {
-            50% {
-                background: #b0bec5;
-            }
-        }
-
-        @keyframes cloudyAnimation {
-            50% {
-                background: #b0bec5;
-            }
-        }
-
-        .cloudy {
-            display: inline-block;
-            background: #cfd8dc;
-            width: 2.5rem;
-            height: 1.25rem;
-            border-radius: 0.75rem;
-            margin-top: 1rem;
-            -webkit-animation: cloudyAnimation 1.2s ease-in infinite;
-                    animation: cloudyAnimation 1.2s ease-in infinite;
-        }
-        .cloudy:before {
-            display: block;
-            content: '';
-            background: #cfd8dc;
-            width: 1.75rem;
-            height: 1.75rem;
-            position: relative;
-            top: -0.5rem;
-            border-radius: 1.5rem;
-            -webkit-animation: cloudyAnimation 1.2s ease-in infinite;
-                    animation: cloudyAnimation 1.2s ease-in infinite;
-        }
-
-        @-webkit-keyframes rainyAnimation {
-            60% {
-                top: -0.25rem;
-                opacity: 0;
-            }
-            61% {
-                top: -1.5rem;
-            }
-        }
-
-        @keyframes rainyAnimation {
-            60% {
-                top: -0.25rem;
-                opacity: 0;
-            }
-            61% {
-                top: -1.5rem;
-            }
-        }
-
-        .rainy {
-            display: inline-block;
-            background: #b0bec5;
-            width: 2.5rem;
-            height: 1.25rem;
-            border-radius: 0.75rem;
-            margin-top: 1rem;
-        }
-        .rainy:before {
-            display: block;
-            content: '';
-            width: 1.75rem;
-            height: 1.75rem;
-            position: relative;
-            top: -0.5rem;
-            border-radius: 1.5rem;
-            background: #b0bec5;
-        }
-
-        .rainy:after {
-            display: block;
-            content :'';
-            border: 4px dotted #b0bec5;
-            border-radius: 4px;
-            border-left: 0;
-            border-right: 0;
-            position: relative;
-            left: 0.625rem;
-            top: -1.5rem;
-            width: 1.25rem;
-            height: 0.3125rem;
-            transform: rotate(3deg);
-            -webkit-animation: rainyAnimation 1.2s linear infinite;
-                    animation: rainyAnimation 1.2s linear infinite;
-        }
 
 
+        /* https://webdevtrick.com/pure-css-tabs-responsive/ */
         /**
         * Tabs
         */
@@ -131,7 +79,6 @@
             display: flex;
             flex-wrap: wrap;
         }
-
         .tabs label {
             order: 1;
             display: block;
@@ -142,7 +89,6 @@
             font-weight: bold;
             transition: background ease 0.2s;
         }
-
         .tabs .tab {
             order: 99;
             flex-grow: 1;
@@ -151,21 +97,20 @@
             padding: 1rem;
             background: #fff;
         }
-
         .tabs input[type="radio"] {
             display: none;
         }
-
         .tabs input[type="radio"]:checked + label {
             background: #fff;
         }
-
         .tabs input[type="radio"]:checked + label + .tab {
             display: block;
         }
-
         @media (max-width: 45em) {
             .en-county-name {display:inline}
+            .tabs input[type="radio"]:checked + label {
+                border-bottom: solid #90CAF9 1px;
+            }
             .tabs .tab,
             .tabs label {
                 order: initial;
@@ -184,26 +129,111 @@
             background: #eee;
             min-height: 100vh;
             box-sizing: border-box;
-            padding: 5vh 0;
+            padding: 3vh 0;
             font-weight: 300;
             line-height: 1.5;
             max-width: 60rem;
             margin: 0 auto;
             font-size: 112%;
         }
+        /* ^ tabs */
+
+
+
+        /* https://codepen.io/WaelYasmina/pen/brgNYK */
+        /* css Weather icon */
+        .element {
+            height: 85px;
+            width: 80px;
+            /* margin: 10px; */
+            float: right;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to bottom, #57c1eb 0%,#246fa8 100%);
+        }
+        .white {fill:#FFFFFF}
+        .gray {fill:#E0E0E0}
+        .yellow {fill:#FFEB3B}
     </style>
+    <script id="json_data" type="application/json" src="/data/json"></script>
+
     <script>
-        const getPOPToCssIcon = (text) => {
-            const number = text.match(/\d+/g)
-                ? text.match(/\d+/g)[0]
-                : null;
-            if (null === number) return '';
-            if (number <= 20) return 'sunny';
-            if (number <= 45) return 'cloudy';
-            return 'rainy';
+        const fileName = (src) => {
+            if (src) {
+                var m = src.toString().match(/.*\/(.+?)\./);
+                if (m && m.length > 1) {
+                    return m[1];
+                }
+            }
+            return '';
+        };
+        const srcToIcon = (src) => {
+            const svg_list = {
+                // Cloudy with sun
+                '04': '<div class="element"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 61.7 42.8" style="enable-background:new 0 0 61.7 42.8;" xml:space="preserve"><g id="Cloud_3"><g id="White_cloud_3"><path id="XMLID_24_" class="white" d="M47.2,42.8H7.9c-4.3,0-7.9-3.5-7.9-7.9l0,0C0,30.5,3.5,27,7.9,27h39.4c4.3,0,7.9,3.5,7.9,7.9 v0C55.1,39.2,51.6,42.8,47.2,42.8z"/><circle id="XMLID_23_" class="white" cx="17.4" cy="25.5" r="9.3"/><circle id="XMLID_22_" class="white" cx="34.5" cy="23.9" r="15.6"/><animateTransform attributeName="transform" attributeType="XML" dur="6s" keyTimes="0;0.5;1" repeatCount="indefinite" type="translate" values="0;5;0" calcMode="linear"></animateTransform></g><g id="Sun_3"><circle id="XMLID_30_" class="yellow" cx="31.4" cy="18.5" r="9"/><g><path id="XMLID_31_" class="yellow" d="M31.4,6.6L31.4,6.6c-0.4,0-0.6-0.3-0.6-0.6V0.6C30.8,0.3,31,0,31.3,0l0.1,0 C31.7,0,32,0.3,32,0.6v5.5C32,6.4,31.7,6.6,31.4,6.6z"/><path id="XMLID_34_" class="yellow" d="M31.4,30.1L31.4,30.1c-0.4,0-0.6,0.3-0.6,0.6v5.5c0,0.3,0.3,0.6,0.6,0.6h0.1 c0.3,0,0.6-0.3,0.6-0.6v-5.5C32,30.4,31.7,30.1,31.4,30.1z"/><path id="XMLID_35_" class="yellow" d="M19.6,18.3L19.6,18.3c0,0.4-0.3,0.6-0.6,0.6h-5.5c-0.3,0-0.6-0.3-0.6-0.6v-0.1 c0-0.3,0.3-0.6,0.6-0.6H19C19.3,17.8,19.6,18,19.6,18.3z"/><path id="XMLID_33_" class="yellow" d="M43.1,18.3L43.1,18.3c0,0.4,0.3,0.6,0.6,0.6h5.5c0.3,0,0.6-0.3,0.6-0.6v-0.1 c0-0.3-0.3-0.6-0.6-0.6h-5.5C43.4,17.8,43.1,18,43.1,18.3z"/><path id="XMLID_37_" class="yellow" d="M22.4,26L22.4,26c0.3,0.3,0.2,0.7,0,0.9l-4.2,3.6c-0.2,0.2-0.6,0.2-0.8-0.1l-0.1-0.1 c-0.2-0.2-0.2-0.6,0.1-0.8l4.2-3.6C21.9,25.8,22.2,25.8,22.4,26z"/><path id="XMLID_36_" class="yellow" d="M40.3,10.7L40.3,10.7c0.3,0.3,0.6,0.3,0.8,0.1l4.2-3.6c0.2-0.2,0.3-0.6,0.1-0.8l-0.1-0.1 c-0.2-0.2-0.6-0.3-0.8-0.1l-4.2,3.6C40.1,10.1,40,10.5,40.3,10.7z"/><path id="XMLID_39_" class="yellow" d="M22.4,10.8L22.4,10.8c0.3-0.3,0.2-0.7,0-0.9l-4.2-3.6c-0.2-0.2-0.6-0.2-0.8,0.1l-0.1,0.1 c-0.2,0.2-0.2,0.6,0.1,0.8l4.2,3.6C21.9,11,22.2,11,22.4,10.8z"/><path id="XMLID_38_" class="yellow" d="M40.3,26.1L40.3,26.1c0.3-0.3,0.6-0.3,0.8-0.1l4.2,3.6c0.2,0.2,0.3,0.6,0.1,0.8l-0.1,0.1 c-0.2,0.2-0.6,0.3-0.8,0.1l-4.2-3.6C40.1,26.7,40,26.3,40.3,26.1z"/><animate attributeType="CSS" attributeName="opacity" attributeType="XML" dur="0.5s" keyTimes="0;0.5;1" repeatCount="indefinite" values="1;0.6;1" calcMode="linear"/></g></g><animateTransform attributeName="transform" attributeType="XML" dur="2s" keyTimes="0;1" repeatCount="indefinite" type="scale" values="1;1" calcMode="linear"></animateTransform></g><g id="Gray_cloud_3"><path id="XMLID_20_" class="gray" d="M55.7,25.1H34.4c-3.3,0-6-2.7-6-6v0c0-3.3,2.7-6,6-6h21.3c3.3,0,6,2.7,6,6v0 C61.7,22.4,59,25.1,55.7,25.1z"/><circle id="XMLID_19_" class="gray" cx="46.7" cy="13.4" r="10.7"/><animateTransform attributeName="transform" attributeType="XML" dur="6s" keyTimes="0;0.5;1" repeatCount="indefinite" type="translate" values="0;-3;0" calcMode="linear"></animateTransform></g></g></svg></div>',
+                // Cloudy
+                '05': '<div class="element"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 60.7 40" style="enable-background:new 0 0 60.7 40;" xml:space="preserve"><g id="Cloud_1"><g id="White_cloud_1"><path id="XMLID_2_" class="white" d="M47.2,40H7.9C3.5,40,0,36.5,0,32.1l0,0c0-4.3,3.5-7.9,7.9-7.9h39.4c4.3,0,7.9,3.5,7.9,7.9v0 C55.1,36.5,51.6,40,47.2,40z"/><circle id="XMLID_3_" class="white" cx="17.4" cy="22.8" r="9.3"/><circle id="XMLID_4_" class="white" cx="34.5" cy="21.1" r="15.6"/><animateTransform attributeName="transform" attributeType="XML" dur="6s" keyTimes="0;0.5;1" repeatCount="indefinite" type="translate" values="0;5;0" calcMode="linear"></animateTransform></g><g id="Gray_cloud_1"><path id="XMLID_6_" class="gray" d="M54.7,22.3H33.4c-3.3,0-6-2.7-6-6v0c0-3.3,2.7-6,6-6h21.3c3.3,0,6,2.7,6,6v0 C60.7,19.6,58,22.3,54.7,22.3z"/><circle id="XMLID_7_" class="gray" cx="45.7" cy="10.7" r="10.7"/><animateTransform attributeName="transform" attributeType="XML" dur="6s" keyTimes="0;0.5;1" repeatCount="indefinite" type="translate" values="0;-3;0" calcMode="linear"></animateTransform></g></g></svg></div>',
+
+                // Cloudy with rain and lightning
+                '15': '<div class="element"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 60.7 80" style="enable-background:new 0 0 60.7 55;" xml:space="preserve"><g id="Cloud_6"><g id="White_cloud_6"><path id="XMLID_81_" class="white" d="M47.2,40H7.9C3.5,40,0,36.5,0,32.1l0,0c0-4.3,3.5-7.9,7.9-7.9h39.4c4.3,0,7.9,3.5,7.9,7.9v0 C55.1,36.5,51.6,40,47.2,40z"/><circle id="XMLID_80_" class="white" cx="17.4" cy="22.8" r="9.3"/><circle id="XMLID_77_" class="white" cx="34.5" cy="21.1" r="15.6"/></g><g id="Gray_cloud_6"><path id="XMLID_75_" class="gray" d="M54.7,22.3H33.4c-3.3,0-6-2.7-6-6v0c0-3.3,2.7-6,6-6h21.3c3.3,0,6,2.7,6,6v0 C60.7,19.6,58,22.3,54.7,22.3z"/><circle id="XMLID_74_" class="gray" cx="45.7" cy="10.7" r="10.7"/><animateTransform attributeName="transform" attributeType="XML" dur="6s" keyTimes="0;0.5;1" repeatCount="indefinite" type="translate" values="0;-3;0" calcMode="linear"></animateTransform></g><g id="Lightning_6"><path id="XMLID_94_" class="yellow" d="M43.6,22.7c-0.2,0.6-0.4,1.3-0.6,1.9c-0.2,0.6-0.4,1.2-0.7,1.8c-0.4,1.2-0.9,2.4-1.5,3.5 c-1,2.3-2.2,4.6-3.4,6.8l-1.7-2.9c3.2-0.1,6.3-0.1,9.5,0l3,0.1l-1.3,2.5c-1.1,2.1-2.2,4.2-3.5,6.2c-0.6,1-1.3,2-2,3 c-0.7,1-1.4,2-2.2,2.9c0.2-1.2,0.5-2.4,0.8-3.5c0.3-1.2,0.6-2.3,1-3.4c0.7-2.3,1.5-4.5,2.4-6.7l1.7,2.7c-3.2,0.1-6.3,0.2-9.5,0 l-3.4-0.1l1.8-2.8c1.4-2.1,2.8-4.2,4.3-6.2c0.8-1,1.6-2,2.4-3c0.4-0.5,0.8-1,1.3-1.5C42.7,23.7,43.1,23.2,43.6,22.7z"/><animate attributeType="CSS" attributeName="opacity" attributeType="XML" dur="1.5s" keyTimes="0;0.5;1" repeatCount="indefinite" values="1;0;1" calcMode="linear"/></g><g id="Rain_6"><path id="Rain_6_right" class="white" d="M36.3,51.9c0,1.7-1.4,3.1-3.1,3.1c-1.7,0-3.1-1.4-3.1-3.1c0-1.7,3.1-7.8,3.1-7.8 S36.3,50.2,36.3,51.9z"/><path id="Rain_6_mid" class="white" d="M26.4,51.9c0,1.7-1.4,3.1-3.1,3.1c-1.7,0-3.1-1.4-3.1-3.1c0-1.7,3.1-7.8,3.1-7.8 S26.4,50.2,26.4,51.9z"/><path id="Rain_6_left" class="white" d="M15.7,51.9c0,1.7-1.4,3.1-3.1,3.1s-3.1-1.4-3.1-3.1c0-1.7,3.1-7.8,3.1-7.8 S15.7,50.2,15.7,51.9z"/><animateTransform attributeName="transform" attributeType="XML" dur="1s" keyTimes="0;1" repeatCount="indefinite" type="translate" values="0 0;0 10" calcMode="linear"></animateTransform><animate attributeType="CSS" attributeName="opacity" attributeType="XML" dur="1s" keyTimes="0;1" repeatCount="indefinite" values="1;0" calcMode="linear"/></g></g></svg></div>',
+                '16': '<div class="element"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 60.7 80" style="enable-background:new 0 0 60.7 55;" xml:space="preserve"><g id="Cloud_6"><g id="White_cloud_6"><path id="XMLID_81_" class="white" d="M47.2,40H7.9C3.5,40,0,36.5,0,32.1l0,0c0-4.3,3.5-7.9,7.9-7.9h39.4c4.3,0,7.9,3.5,7.9,7.9v0 C55.1,36.5,51.6,40,47.2,40z"/><circle id="XMLID_80_" class="white" cx="17.4" cy="22.8" r="9.3"/><circle id="XMLID_77_" class="white" cx="34.5" cy="21.1" r="15.6"/></g><g id="Gray_cloud_6"><path id="XMLID_75_" class="gray" d="M54.7,22.3H33.4c-3.3,0-6-2.7-6-6v0c0-3.3,2.7-6,6-6h21.3c3.3,0,6,2.7,6,6v0 C60.7,19.6,58,22.3,54.7,22.3z"/><circle id="XMLID_74_" class="gray" cx="45.7" cy="10.7" r="10.7"/><animateTransform attributeName="transform" attributeType="XML" dur="6s" keyTimes="0;0.5;1" repeatCount="indefinite" type="translate" values="0;-3;0" calcMode="linear"></animateTransform></g><g id="Lightning_6"><path id="XMLID_94_" class="yellow" d="M43.6,22.7c-0.2,0.6-0.4,1.3-0.6,1.9c-0.2,0.6-0.4,1.2-0.7,1.8c-0.4,1.2-0.9,2.4-1.5,3.5 c-1,2.3-2.2,4.6-3.4,6.8l-1.7-2.9c3.2-0.1,6.3-0.1,9.5,0l3,0.1l-1.3,2.5c-1.1,2.1-2.2,4.2-3.5,6.2c-0.6,1-1.3,2-2,3 c-0.7,1-1.4,2-2.2,2.9c0.2-1.2,0.5-2.4,0.8-3.5c0.3-1.2,0.6-2.3,1-3.4c0.7-2.3,1.5-4.5,2.4-6.7l1.7,2.7c-3.2,0.1-6.3,0.2-9.5,0 l-3.4-0.1l1.8-2.8c1.4-2.1,2.8-4.2,4.3-6.2c0.8-1,1.6-2,2.4-3c0.4-0.5,0.8-1,1.3-1.5C42.7,23.7,43.1,23.2,43.6,22.7z"/><animate attributeType="CSS" attributeName="opacity" attributeType="XML" dur="1.5s" keyTimes="0;0.5;1" repeatCount="indefinite" values="1;0;1" calcMode="linear"/></g><g id="Rain_6"><path id="Rain_6_right" class="white" d="M36.3,51.9c0,1.7-1.4,3.1-3.1,3.1c-1.7,0-3.1-1.4-3.1-3.1c0-1.7,3.1-7.8,3.1-7.8 S36.3,50.2,36.3,51.9z"/><path id="Rain_6_mid" class="white" d="M26.4,51.9c0,1.7-1.4,3.1-3.1,3.1c-1.7,0-3.1-1.4-3.1-3.1c0-1.7,3.1-7.8,3.1-7.8 S26.4,50.2,26.4,51.9z"/><path id="Rain_6_left" class="white" d="M15.7,51.9c0,1.7-1.4,3.1-3.1,3.1s-3.1-1.4-3.1-3.1c0-1.7,3.1-7.8,3.1-7.8 S15.7,50.2,15.7,51.9z"/><animateTransform attributeName="transform" attributeType="XML" dur="1s" keyTimes="0;1" repeatCount="indefinite" type="translate" values="0 0;0 10" calcMode="linear"></animateTransform><animate attributeType="CSS" attributeName="opacity" attributeType="XML" dur="1s" keyTimes="0;1" repeatCount="indefinite" values="1;0" calcMode="linear"/></g></g></svg></div>',
+            }
+            return '<!--16-->' + (svg_list[fileName(src)] || '');
         };
         const timestampToLocalDatetime = (timestamp) => {
             return new Date(timestamp);
+        };
+        const columnGenerator = (all_day) => {
+            let html = '';
+            const column = (current_title, temperature, rain, rainImg) => {
+                return `
+                    <div class="column">
+                        <h2>${current_title} - <span class="smaller">${rainImg.alt}</span></h2>
+                        <div class="row">
+                            <div class="two-col">
+                                <p>降雨機率 ${rain} %</p>
+                                <p>${temperature} ˚C</p>
+                            </div>
+                            <div class="two-col pull-right">${srcToIcon(rainImg.src)}</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            html += column(all_day.current_title[0], all_day.temperature[0], all_day.rain[0], all_day.rainImg[0]);
+            html += column(all_day.current_title[1], all_day.temperature[1], all_day.rain[1], all_day.rainImg[1]);
+            html += column(all_day.current_title[2], all_day.temperature[2], all_day.rain[02], all_day.rainImg[2]);
+
+            return html;
+        };
+        const tabsGenerator = (json_data) => {
+            const tabs = [];
+            json_data.data.forEach((item, key) => {
+                const checked = (key == 0) ? 'checked="checked"' : '';
+                const index = key + 1;
+                tabs.push(`
+                        <input type="radio" name="tabs" id="tab${index}" ${checked}>
+                        <label for="tab${index}">${item['county']} <span class="en-county-name">/ ${item['en_county_name']}</span></label>
+                        <div class="tab">
+                            <p>${item['description']}<a href="${item['target_url']}">👉</a></p>
+                            <section class="columns">
+                                ${columnGenerator(item.all_day)}
+                            </section>
+                            <time datetime="${item['public_time']}" class="mini right">${item['public_time']}</time>
+                        </div>
+                    `);
+            });
+
+            const updated_at = timestampToLocalDatetime(json_data.updated_at);
+            return {
+                updated_at,
+                tabs,
+            };
         };
 
         fetch('./data/json', {
@@ -212,41 +242,33 @@
                 })
             })
             .then(res => res.json())
+            .then(data => tabsGenerator(data))
             .then(data => {
-                let html = '';
-
-                let tabs = [];
-                data.forEach(function (item, key) {
-                    const checked = (key ==0) ? 'checked="checked"' : '';
-                    const index = key + 1;
-                    const datetime = timestampToLocalDatetime(item['updated_at']);
-                    tabs.push(`
-                        <input type="radio" name="tabs" id="tab${index}" ${checked}>
-                        <label for="tab${index}">${item['county']} <span class="en-county-name">/ ${item['en_county_name']}</span></label>
-                        <div class="tab">
-                            <h2>${item['rain']} <span class="${getPOPToCssIcon(item['rain'])}"></span></h2>
-                            <p>${item['current_title']}</p>
-                            <p>${item['description']}<a href="${item['target_url']}">👉</a></p>
-                            <p>${item['temperature']}</p>
-                            <time datetime="${datetime}" class="mini">updated_at: ${datetime}</time>
-                        </div>
-                    `);
-                });
-
-                return tabs;
-            }).then(data => {
+                const updated_at = document.querySelector('#updated_at');
+                updated_at.setAttribute('datetime', data.updated_at);
+                updated_at.innerText = `updated at: ${data.updated_at}`;
                 const tabs = document.querySelector('.tabs');
-                tabs.innerHTML = data.join('');
+                tabs.innerHTML = data.tabs.join('');
                 document.querySelector('#app').classList.add("hidden");
                 tabs.classList.remove("hidden");
             });
     </script>
 </head>
 <body>
-    <div id="app">loading...</div>
-    <div class="tabs"><!-- js render --></div>
-
+    <h1>weather-crawler</h1>
     <!-- https://github.com/tholman/github-corners -->
     <a href="https://github.com/cscolabear/weather-crawler/" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <div id="app">loading...</div>
+    <div class="tabs"><!-- js render --></div>
+    <p><time datetime="" class="mini right" id="updated_at"></time></p>
+
+    <footer>
+        <p>Feature Of Project</p>
+        <p>
+            <a href="https://github.com/cscolabear/weather-crawler/">weather-crawler</a> | puppeteer, ci, travis, nodejs
+        </p>
+        <p>Coding by Cola</p>
+    </footer>
 </body>
 </html>
