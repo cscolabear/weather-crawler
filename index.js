@@ -1,7 +1,6 @@
-const Browser = require('./src/Browser');
 const fs = require('fs');
+const Browser = require('./src/Browser');
 
-let result = [];
 const countys = {
   63: 'Taipei City',
   65: 'New Taipei City',
@@ -11,54 +10,101 @@ const countys = {
 };
 
 const getWeather = async (target_url, en_county_name) => {
-  let result;
-  try {
-    const page = await Browser.open(target_url);
-    await page.setViewport({ width: 1280, height: 800, });
+  const page = await Browser.open(target_url);
+  await page.setViewport({ width: 1280, height: 800, });
 
-    result = await page.evaluate((target_url, en_county_name) => {
-
-      const getTextContent = (selector_string, default_string = '') => {
-        return document.querySelector(selector_string)
-          ? document.querySelector(selector_string).textContent
-          : default_string;
+  const result = await page.evaluate((target_url, en_county_name) => {
+    const getContent = (
+      selector_string,
+      getCount = 1,
+      getAttributes = ['textContent'],
+    ) => {
+      const target = document.querySelectorAll(selector_string);
+      if (target.length <= 0) {
+        return [null];
       }
+      const getAttribute = (dom) => {
+        if (getAttributes.length === 1) {
+          return dom[getAttributes[0]];
+        }
 
-      const county = getTextContent('.main-title', 'no county');
-      const current_title = getTextContent('.to-to li .title');
-      const description = getTextContent('#marquee_1', 'no description');
-      const temperature = getTextContent('.to-to li .tem-C, is-active') + '˚C';
-      const rain = getTextContent('.to-to li .rain');
-      const updated_at = Date.now();
+        const att_result = {};
+        getAttributes.forEach((att) => {
+          att_result[att] = dom[att] || null;
+        });
+        return att_result;
+      };
 
-      return { county, en_county_name, current_title, description, temperature, rain, target_url, updated_at };
-    }, target_url, en_county_name);
+      const data = [];
+      let inx = 0;
+      while (inx < getCount) {
+        data.push(
+          getAttribute(target[inx]),
+        );
+        inx += 1;
+      }
+      return data;
+    };
 
-  } catch (err) {
-    console.error(err);
 
-  } finally {
-    return result;
-  }
+    const public_time = getContent('.public-time')[0];
+    const county = getContent('.main-title')[0];
+    const current_title = getContent('.to-to li .title', 3);
+    const description = getContent('#marquee_1')[0];
+    const temperature = getContent('.to-to li .tem-C, is-active', 3);
+    const rain = getContent('.to-to li .rain', 3)
+      .map(str => (str.match(/\d+/mg) || '')[0] || null);
+    const rainImg = getContent('.to-to li img', 3, ['src', 'alt']);
+
+    const all_day = {
+      current_title,
+      temperature,
+      rain,
+      rainImg,
+    };
+
+    return {
+      public_time,
+      county,
+      en_county_name,
+      description,
+      all_day,
+      target_url,
+    };
+  }, target_url, en_county_name);
+
+  return result;
 };
 
-Object.keys(countys).map(cid => {
-  target_url = `https://www.cwb.gov.tw/V8/C/W/County/County.html?CID=${cid}`;
+const promise_queue = [];
+Object.keys(countys).map((cid) => {
+  const target_url = `https://www.cwb.gov.tw/V8/C/W/County/County.html?CID=${cid}`;
   console.log(`${countys[cid]}: ${target_url}`);
-  result.push(getWeather(target_url, countys[cid]))
+  try {
+    promise_queue.push(getWeather(target_url, countys[cid]));
+  } catch (error) {
+    console.error(error);
+  }
+
+  return true;
 });
 
-Promise.all(result).then(values => {
+Promise.all(promise_queue).then((values) => {
   Browser.exit();
   console.table(values);
-  fs.writeFileSync("./data/json", JSON.stringify(values), function (err) {
+  const data = {
+    updated_at: Date.now(),
+    data: values,
+  };
+  fs.writeFileSync('./data/json', JSON.stringify(data), (err) => {
     if (err) {
       return console.error(err);
     }
+    return true;
   });
-  console.log("The file was saved!");
-  process.exit();
-}).catch(reason => {
+  console.log('The file was saved!');
+
+  return process.exit();
+}).catch((reason) => {
   console.error(reason);
 });
-
