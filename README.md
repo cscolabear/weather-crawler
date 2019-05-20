@@ -18,12 +18,12 @@ demo: https://cscolabear.github.io/weather-crawler/
 
 
 desktop preview
-![desktop](https://user-images.githubusercontent.com/4863629/57497902-3b1bf300-730c-11e9-8991-9e968b3ab9e8.png)
+![desktop](https://user-images.githubusercontent.com/4863629/57995334-1554d200-7af4-11e9-86e0-cf2a1a3f2c55.png)
 
 
 mobile web preview
 
-<img src="https://user-images.githubusercontent.com/4863629/57497914-48d17880-730c-11e9-95dc-d8a2400e5d45.png" alt="mobile" height="240px">
+<img src="https://user-images.githubusercontent.com/4863629/57995248-a8413c80-7af3-11e9-8406-cec37dd3e425.png" alt="mobile" height="300px">
 
 
 ---
