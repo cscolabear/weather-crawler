@@ -13,7 +13,7 @@ describe('Test Browser.js', async () => {
 
   it('Website Should Load `www.cwb.gov.tw`', async () => {
     page = await Browser.open(target_url);
-  }).timeout(10000);
+  }).timeout(0);
 
   it('response status equal 200', async () => {
     assert.strictEqual(Browser.response.status(), 200);

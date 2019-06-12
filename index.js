@@ -11,7 +11,10 @@ const countys = {
 
 const getWeather = async (target_url, en_county_name) => {
   const page = await Browser.open(target_url);
-  await page.setViewport({ width: 1280, height: 800, });
+  await page.setViewport({
+    width: 1280,
+    height: 800,
+  });
 
   const result = await page.evaluate((target_url, en_county_name) => {
     const getContent = (
