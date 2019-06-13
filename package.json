@@ -1,21 +1,46 @@
 {
   "name": "weather-crawler",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.html",
-  "scripts": {
-    "test": "./node_modules/mocha/bin/mocha --exit",
-    "build": "node index.js"
-  },
-  "author": "Cola",
+  "version": "1.2.0",
+  "private": true,
   "dependencies": {
-    "puppeteer": "^1.15.0"
+    "nes.css": "^2.2.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "3.0.1"
+  },
+  "homepage": "https://localhost/weather-crawler/build",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "watch": "cra-build-watch -v",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "crawler": "node src/crawler.js"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not ie <= 11",
+      "not op_mini all",
+      "ie 10"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "eslint": "^5.15.1",
+    "cra-build-watch": "^1.4.1",
+    "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.0",
-    "eslint-plugin-import": "^2.16.0",
-    "mocha": "^6.1.4"
+    "eslint-plugin-import": "^2.17.3",
+    "json-loader": "^0.5.7",
+    "node-sass": "^4.12.0",
+    "puppeteer": "^1.17.0"
   }
 }

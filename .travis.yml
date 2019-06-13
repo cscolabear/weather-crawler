@@ -21,7 +21,7 @@ script:
   - git checkout -b gh-pages
   - git rebase master
   # build
-  - npm run build
+  - npm run crawler
   # git
   - git add -A .
   - git commit -m ":green_heart:\ Update by travis-ci"

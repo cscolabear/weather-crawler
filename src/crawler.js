@@ -1,5 +1,5 @@
 const fs = require('fs');
-const Browser = require('./src/Browser');
+const Browser = require('./lib/Browser');
 
 const countys = {
   63: 'Taipei City',
@@ -8,6 +8,8 @@ const countys = {
   67: 'Tainan City',
   64: 'Kaohsiung City',
 };
+
+const jsonDataPath = './src/data/data.json';
 
 const getWeather = async (target_url, en_county_name) => {
   const page = await Browser.open(target_url);
@@ -94,12 +96,17 @@ Object.keys(countys).map((cid) => {
 
 Promise.all(promise_queue).then((values) => {
   Browser.exit();
-  console.table(values);
-  const data = {
+  const dataset = {
     updated_at: Date.now(),
-    data: values,
+    data: {},
   };
-  fs.writeFileSync('./data/json', JSON.stringify(data), (err) => {
+  values.forEach((item) => {
+    dataset.data[item.en_county_name] = item;
+  });
+
+  console.table(dataset.data);
+
+  fs.writeFileSync(jsonDataPath, JSON.stringify(dataset), (err) => {
     if (err) {
       return console.error(err);
     }
