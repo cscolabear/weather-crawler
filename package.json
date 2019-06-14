@@ -11,7 +11,7 @@
   "homepage": "https://localhost/weather-crawler/build",
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && cp -a build/. docs/",
+    "build": "react-scripts build && bash build.sh",
     "watch": "cra-build-watch -v",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
