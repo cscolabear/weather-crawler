@@ -18,10 +18,9 @@ script:
   # Set Git config
   - git config --global user.name "travis-ci"
   - git config --global user.email "$GIT_EMAIL"
-  - git checkout -b gh-pages
-  - git rebase master
   # build
   - npm run crawler
+  - npm run build
   # git
   - git add -A .
   - git commit -m ":green_heart:\ Update by travis-ci"
@@ -29,7 +28,8 @@ script:
   - git remote rm origin
   # Add new "origin" with access token in the git URL for authentication
   - git remote add origin https://${GH_TOKEN}@${GH_REF} > /dev/null 2>&1
-  - git push -f origin gh-pages --quiet
+  - git push -u origin master --quiet
+
 
 # safelist
 branches:
