@@ -3,15 +3,21 @@
   "version": "1.2.0",
   "private": true,
   "dependencies": {
+    "gh-pages": "^2.0.1",
     "nes.css": "^2.2.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1"
   },
-  "homepage": "https://localhost/weather-crawler/build",
+  "homepage": "https://local.weather-crawler",
+  "github-page-homepage": "https://cscolabear.github.io/weather-crawler",
   "scripts": {
+    "predeploy": "bash deploy.sh",
+    "deploy": "gh-pages -d build && npm run build",
+
     "start": "react-scripts start",
-    "build": "react-scripts build && bash build.sh",
+    "build": "react-scripts build",
+
     "watch": "cra-build-watch -v",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
