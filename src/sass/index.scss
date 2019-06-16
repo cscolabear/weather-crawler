@@ -5,7 +5,7 @@
 $primary-theme-bg-color: #212529;
 $primary-theme-color: #ffffff;
 $base-font-size: 14px;
-$break-large: 1200px;
+$break-large: 1024px;
 
 
 
@@ -87,132 +87,7 @@ input[type="radio"] {
 }
 
 
-
-//
-// tab
-//
-.tab-container {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.tab-list {
-  width: 100%;
-  padding: 0 5%;
-  display: flex;
-  flex-wrap: nowrap;
-
-  flex-grow: 1;
-
-  @media screen and (max-width: $break-large) {
-    padding: 0 3%;
-    flex-wrap: wrap;
-  }
-}
-
-.tab-list__tab-btn {
-  padding-right: 3.5rem;
-  display: block;
-  margin-bottom: 0;
-  // cursor: pointer;
-  font-weight: bold;
-
-  @media screen and (max-width: $break-large) {
-    margin-bottom: 0.4rem;
-    width: 100%;
-  }
-}
-
-.tabs {
-  width: 100%;
-  margin-top: 0;
-  margin-bottom: 5px;
-  min-height: 340px;
-
-  flex-grow: 1;
-
-  @media screen and (max-width: $break-large) {
-    min-height: 200px;
-  }
-}
-
-.tabs__tab-content {
-  height: 100%;
-}
-
-.tabs__tab-content__desc {
-  height: 2.5rem;
-  margin-top: 0.3rem;
-
-  @media screen and (max-width: $break-large) {
-    height: 3.5rem
-  }
-}
-
-.tabs__tab-column {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-}
-
-.tabs__tab-column-row {
-  flex-grow: 1;
-  margin: 2px;
-  padding: 10px;
-  min-height: 160px;
-
-  h2 {
-    display: flex;
-    align-items: center;
-
-    span {
-      margin: 0 5px;
-    }
-  }
-
-  &:nth-child(2) {
-    border-left: 1px #eee solid;
-    border-right: 1px #eee solid;
-  }
-
-  @media screen and (max-width: $break-large) {
-    width: 100%;
-
-    &:nth-child(2) {
-      border-left: 0;
-      border-right: 0;
-      border-top: 1px #eee solid;
-      border-bottom: 1px #eee solid;
-    }
-  }
-}
-
-.tabs__tab-column-row-detail {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 0 3%;
-}
-
-.two-col {
-  flex-grow: 2;
-}
-.two-col-photo {
-  flex-grow: 1;
-  text-align: right;
-}
-
-.en-county-name {
-  display: none;
-
-  @media screen and (max-width: $break-large) {
-    display: inline;
-  }
-}
-
-.tab-desc-target-url {
-  margin-left: 0.7rem;
-}
-
+@import "tab";
 
 
 //

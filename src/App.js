@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import FooterComponent from './components/FooterComponent';
-import TabListComponent from './components/TabListComponent';
 import TabComponent from './components/TabComponent';
 import { data as Data, updated_at as updatedAt } from './data/data.json';
 
@@ -22,35 +21,29 @@ class App extends Component {
     });
   }
 
-  renderTab() {
+  renderTabs() {
     const citys = Object.keys(this.state.data);
-    const tabList = [];
-    const tab = [];
+    const tabs = [];
     citys.forEach((city) => {
       const cityProps = this.state.data[city];
       if (!cityProps) return;
 
       cityProps.id = `tab-${cityProps.en_county_name}`;
-      cityProps.hidden = cityProps.en_county_name !== this.state.current;
+      cityProps.checked = cityProps.en_county_name === this.state.current;
+      cityProps.hidden = !cityProps.checked;
 
-      tabList.push(
-        <TabListComponent
+      tabs.push(
+        <TabComponent
+          key={`tab-${city}`}
           city={cityProps}
           onClick={cityName => this.handleClick(cityName)}
-          key={`tabList-${city}`}
         />,
       );
-      tab.push(<TabComponent city={cityProps} key={`tab-${city}`} />);
     });
 
     return (
-      <div className="tab-container">
-        <div className="tab-list">
-          {tabList}
-        </div>
-        <div className="tabs">
-          {tab}
-        </div>
+      <div className="tabs">
+        {tabs}
       </div>
     );
   }
@@ -60,7 +53,8 @@ class App extends Component {
       <div className="App">
         <h1>weather-crawler</h1>
 
-        {this.renderTab()}
+        {this.renderTabs()}
+
         <span className="mini right">
           {this.updatedAt}
         </span>

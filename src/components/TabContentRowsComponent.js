@@ -28,8 +28,9 @@ function row(data, key) {
   );
 }
 
-const TabColumnComponent = (props) => {
+const TabContentRowsComponent = (props) => {
   const { allDay } = props;
+
   const rows = [];
   allDay.current_title
     .forEach((data, key) => {
@@ -37,10 +38,10 @@ const TabColumnComponent = (props) => {
     });
 
   return (
-    <React.Fragment>
+    <div className="tabs__tab-column">
       {rows}
-    </React.Fragment>
+    </div>
   );
 };
 
-export default TabColumnComponent;
+export default TabContentRowsComponent;
