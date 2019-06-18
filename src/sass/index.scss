@@ -34,13 +34,6 @@ a {
   }
 }
 
-input[type="radio"] {
-
-  &:checked+span::before {
-    animation: blink 1s infinite steps(1);
-  }
-}
-
 .polar-bear {
   position: relative;
   display: inline-block;

@@ -101,7 +101,8 @@ Promise.all(promise_queue).then((values) => {
     data: {},
   };
   values.forEach((item) => {
-    dataset.data[item.en_county_name] = item;
+    const Id = item.en_county_name.toLowerCase().replace(/\s+/gi, '-');
+    dataset.data[Id] = item;
   });
 
   console.table(dataset.data);
