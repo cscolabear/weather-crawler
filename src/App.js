@@ -35,7 +35,12 @@ class App extends Component {
 
     const { current } = this.state.data[cityId].ref;
     if (current) {
-      window.scrollTo(0, current.offsetTop);
+      window.setTimeout(() => {
+        window.scrollTo({
+          top: current.offsetTop,
+          behavior: 'smooth',
+        });
+      }, 350);
     }
   }
 
