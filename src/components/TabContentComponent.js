@@ -4,10 +4,9 @@ import TabContentRowsComponent from './TabContentRowsComponent';
 
 const TabContentComponent = (props) => {
   const { city } = props;
-  const hidden = city.hidden ? 'hidden' : '';
 
   return (
-    <div className={`tabs__tab-content nes-container is-rounded is-dark ${hidden}`}>
+    <div className="tabs__tab-content nes-container is-rounded is-dark">
       <p className="tabs__tab-content__desc">
         {city.description}
         <a href={city.target_url} target="_blank" className="tab-desc-target-url" rel="noopener noreferrer">

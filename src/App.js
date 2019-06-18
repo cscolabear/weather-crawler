@@ -1,66 +1,105 @@
 import React, { Component } from 'react';
+import { Route, Link, HashRouter } from 'react-router-dom';
 import FooterComponent from './components/FooterComponent';
-import TabComponent from './components/TabComponent';
+import TabButtonComponent from './components/TabButtonComponent';
+import TabContentComponent from './components/TabContentComponent';
 import { data as Data, updated_at as updatedAt } from './data/data.json';
+import { GetCityProp, IdGenerator } from './lib/Utils';
 
 
 class App extends Component {
   constructor(props) {
     super(props);
+    this.default = 'taipei-city';
     this.state = {
       data: Data,
-      current: Object.keys(Data)[0] || 'Taipei City',
+      current: this.default,
     };
+
+    Object.keys(this.state.data)
+      .forEach((city) => {
+        this.state.data[city].ref = React.createRef();
+      });
 
     this.updatedAt = new Date(updatedAt).toString();
   }
 
-  handleClick(cityName) {
+  setCurrent(cityId) {
+    if (this.state.current === (cityId || this.default)) {
+      return;
+    }
+
     this.setState({
-      current: cityName,
+      current: cityId || this.default,
     });
+
+    const { current } = this.state.data[cityId].ref;
+    if (current) {
+      window.scrollTo(0, current.offsetTop);
+    }
   }
 
-  renderTabs() {
-    const citys = Object.keys(this.state.data);
-    const tabs = [];
-    citys.forEach((city) => {
-      const cityProps = this.state.data[city];
-      if (!cityProps) return;
+  routeGenerator() {
+    const routes = [];
 
-      cityProps.id = `tab-${cityProps.en_county_name}`;
-      cityProps.checked = cityProps.en_county_name === this.state.current;
-      cityProps.hidden = !cityProps.checked;
+    Object.keys(this.state.data)
+      .forEach((city) => {
+        const cityProps = GetCityProp(this.state.data[city], this.state.current);
 
-      tabs.push(
-        <TabComponent
-          key={`tab-${city}`}
+        const linkComponent = <TabButtonComponent
           city={cityProps}
-          onClick={cityName => this.handleClick(cityName)}
-        />,
-      );
-    });
+          onClick={cityName => this.setCurrent(cityName)}
+        />;
+        const contentComponent = ({ location }) => {
+          const pathname = IdGenerator(location.pathname);
+          this.setCurrent(pathname);
+          return (<TabContentComponent city={cityProps} />);
+        };
+        const route = {
+          link: {
+            to: `/${cityProps.id}`,
+            view: linkComponent,
+          },
+          content: {
+            path: `/${cityProps.id}`,
+            view: contentComponent,
+          },
+        };
 
-    return (
-      <div className="tabs">
-        {tabs}
-      </div>
-    );
+        routes.push(route);
+      });
+
+    return routes;
   }
 
   render() {
+    const routes = this.routeGenerator();
+
     return (
-      <div className="App">
-        <h1>weather-crawler</h1>
+      <HashRouter basename="/">
+        <div className="App">
+          <h1>weather-crawler</h1>
 
-        {this.renderTabs()}
+          <div className="tabs">
+            {routes.map((route, index) => (
+              <React.Fragment key={index}>
+                <Link to={route.link.to}>{route.link.view}</Link>
+                <Route
+                  path={route.content.path}
+                  exact={route.content.exact}
+                  component={route.content.view}
+                />
+              </React.Fragment>
+            ))}
+          </div>
 
-        <span className="mini right">
-          {this.updatedAt}
-        </span>
+          <span className="mini right">
+            {this.updatedAt}
+          </span>
 
-        <FooterComponent />
-      </div>
+          <FooterComponent />
+        </div>
+      </HashRouter>
     );
   }
 }

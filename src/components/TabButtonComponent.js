@@ -1,18 +1,16 @@
 import React from 'react';
 
+
 const TabButtonComponent = (props) => {
   const { city } = props;
+  const isChecked = city.checked ? 'is-checked' : '';
 
   return (
-    <label htmlFor={city.id} className="tab-label" onClick={() => props.onClick(city.en_county_name)}>
-      <input
-        id={city.id}
-        type="radio"
-        name="tabs"
-        value={city.en_county_name}
-        defaultChecked={city.checked}
-        className="nes-radio is-dark"
-      />
+    <label
+      ref={city.ref}
+      className={`tab-label ${isChecked}`}
+      onClick={() => props.onClick(city.id)}
+    >
       <span>{city.county}</span>
       <span className="en-county-name">/{city.en_county_name}</span>
     </label>
