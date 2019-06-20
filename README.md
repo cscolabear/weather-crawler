@@ -1,6 +1,6 @@
 # pure js weather-crawler ![travis-ci-status-image](https://travis-ci.org/cscolabear/weather-crawler.svg?branch=master)
 
-demo: https://cscolabear.github.io/weather-crawler/
+demo: https://cscolabear.github.io/weather-crawler/#/taipei-city
 
 ---
 

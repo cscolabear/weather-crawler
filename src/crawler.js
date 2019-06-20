@@ -7,6 +7,8 @@ const countys = {
   66: 'Taichung City',
   67: 'Tainan City',
   64: 'Kaohsiung City',
+  10002: 'Yilan County',
+  10015: 'Hualien County',
 };
 
 const jsonDataPath = './src/data/data.json';
