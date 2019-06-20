@@ -8,9 +8,9 @@ function rainColor(rate) {
   return '';
 }
 
-function row(data, key) {
+function row(data, cityId, key) {
   return (
-    <div className="tabs__tab-column-row" key={key}>
+    <div className="tabs__tab-column-row" key={`${cityId}-${data.current_title[key]}`}>
       <h2>
         <span>{data.current_title[key]}</span>
         <span className="normal"> - {data.rainImg[key].alt}</span>
@@ -29,12 +29,12 @@ function row(data, key) {
 }
 
 const TabContentRowsComponent = (props) => {
-  const { allDay } = props;
+  const { allDay, cityId } = props;
 
   const rows = [];
   allDay.current_title
     .forEach((data, key) => {
-      rows.push(row(allDay, key));
+      rows.push(row(allDay, cityId, key));
     });
 
   return (

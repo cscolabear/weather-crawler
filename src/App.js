@@ -87,7 +87,7 @@ class App extends Component {
 
           <div className="tabs">
             {routes.map((route, index) => (
-              <React.Fragment key={index}>
+              <React.Fragment key={route.link.to}>
                 <Link to={route.link.to}>{route.link.view}</Link>
                 <Route
                   path={route.content.path}

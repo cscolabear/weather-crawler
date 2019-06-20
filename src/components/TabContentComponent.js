@@ -14,7 +14,7 @@ const TabContentComponent = (props) => {
         </a>
       </p>
 
-      <TabContentRowsComponent allDay={city.all_day} />
+      <TabContentRowsComponent allDay={city.all_day} cityId={city.id} />
     </div>
   );
 };
