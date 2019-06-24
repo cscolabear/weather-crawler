@@ -25,16 +25,18 @@ class App extends Component {
   }
 
   setCurrent(cityId) {
-    if (this.state.current === (cityId || this.default)) {
+    const targetCityId = cityId.length <= 0
+      ? this.default
+      : cityId;
+
+    if (this.state.current === targetCityId) {
       return;
     }
 
-    this.setState({
-      current: cityId || this.default,
-    });
+    this.setState({ current: targetCityId });
 
-    const { current } = this.state.data[cityId].ref;
-    if (current) {
+    const { current } = this.state.data[targetCityId].ref;
+    if (current && current.offsetTop) {
       window.setTimeout(() => {
         window.scrollTo({
           top: current.offsetTop,
@@ -86,16 +88,20 @@ class App extends Component {
           <h1>weather-crawler</h1>
 
           <div className="tabs">
-            {routes.map((route, index) => (
-              <React.Fragment key={route.link.to}>
+            {routes.map(route => (
+              <React.Fragment key={`link-${route.link.to}`}>
                 <Link to={route.link.to}>{route.link.view}</Link>
-                <Route
-                  path={route.content.path}
-                  exact={route.content.exact}
-                  component={route.content.view}
-                />
               </React.Fragment>
             ))}
+
+            {/* default view */}
+            <Route exact path='/' component={routes[0].content.view} />
+            {routes.map(route => (
+              <React.Fragment key={`route-${route.link.to}`}>
+                <Route path={route.content.path} component={route.content.view} />
+              </React.Fragment>
+            ))}
+
           </div>
 
           <span className="mini right">
