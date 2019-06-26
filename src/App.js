@@ -88,16 +88,12 @@ class App extends Component {
           <h1>weather-crawler</h1>
 
           <div className="tabs">
-            {routes.map(route => (
-              <React.Fragment key={`link-${route.link.to}`}>
-                <Link to={route.link.to}>{route.link.view}</Link>
-              </React.Fragment>
-            ))}
-
-            {/* default view */}
-            <Route exact path='/' component={routes[0].content.view} />
-            {routes.map(route => (
+            {routes.map((route, index) => (
               <React.Fragment key={`route-${route.link.to}`}>
+                <Link to={route.link.to}>{route.link.view}</Link>
+                {index === 0
+                  ? <Route exact path='/' component={routes[index].content.view} />
+                  : ''}
                 <Route path={route.content.path} component={route.content.view} />
               </React.Fragment>
             ))}
