@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 
 const TabButtonComponent = (props) => {
@@ -15,6 +16,11 @@ const TabButtonComponent = (props) => {
       <span className="en-county-name">/{city.en_county_name}</span>
     </label>
   );
+};
+
+TabButtonComponent.propTypes = {
+  city: PropTypes.object.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default TabButtonComponent;
