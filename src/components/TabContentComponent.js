@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TabContentRowsComponent from './TabContentRowsComponent';
 
 
@@ -17,6 +18,10 @@ const TabContentComponent = (props) => {
       <TabContentRowsComponent allDay={city.all_day} cityId={city.id} />
     </div>
   );
+};
+
+TabContentComponent.propTypes = {
+  city: PropTypes.object.isRequired,
 };
 
 export default TabContentComponent;

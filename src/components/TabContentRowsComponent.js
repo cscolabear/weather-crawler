@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 
 function rainColor(rate) {
   if (rate > 60) {
@@ -42,6 +44,11 @@ const TabContentRowsComponent = (props) => {
       {rows}
     </div>
   );
+};
+
+TabContentRowsComponent.propTypes = {
+  allDay: PropTypes.object.isRequired,
+  cityId: PropTypes.string.isRequired,
 };
 
 export default TabContentRowsComponent;
