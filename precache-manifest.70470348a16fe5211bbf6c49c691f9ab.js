@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "a2fdabb74f0e8403a8dbce82533c5190",
+    "revision": "d527c33e37247a63a77830346cbd9c0c",
     "url": "/weather-crawler/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/weather-crawler/static/css/2.b18ee16a.chunk.css"
   },
   {
-    "revision": "c415cd80bb4b2e3d6be2",
+    "revision": "046bc64110cc58cda5d0",
     "url": "/weather-crawler/static/css/main.a057fd2b.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/weather-crawler/static/js/2.3f06d9f0.chunk.js"
   },
   {
-    "revision": "c415cd80bb4b2e3d6be2",
-    "url": "/weather-crawler/static/js/main.16f614c8.chunk.js"
+    "revision": "046bc64110cc58cda5d0",
+    "url": "/weather-crawler/static/js/main.7515a3d9.chunk.js"
   },
   {
     "revision": "2cf69133631eaa0591e8",
