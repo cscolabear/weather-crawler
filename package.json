@@ -9,7 +9,7 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.1",
-    "react-scripts": "3.0.1"
+    "react-scripts": "5.0.1"
   },
   "homepage": "https://local.weather-crawler",
   "github-page-homepage": "https://cscolabear.github.io/weather-crawler",
@@ -41,7 +41,7 @@
     ]
   },
   "devDependencies": {
-    "cra-build-watch": "^1.4.1",
+    "cra-build-watch": "^3.4.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.17.3",
